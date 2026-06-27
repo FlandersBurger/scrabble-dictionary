@@ -16,6 +16,14 @@
     "game"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FlandersBurger/scrabble-dictionary.git"
+  },
+  "homepage": "https://github.com/FlandersBurger/scrabble-dictionary#readme",
+  "bugs": {
+    "url": "https://github.com/FlandersBurger/scrabble-dictionary/issues"
+  },
   "scripts": {
     "validate": "node scripts/validate.js",
     "bump-versions": "node scripts/bump-versions.js"
