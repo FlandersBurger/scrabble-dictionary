@@ -1,0 +1,38 @@
+name: Bump language version
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+
+jobs:
+  bump-version:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Bump version for changed languages
+        run: node scripts/bump-versions.js "origin/${{ github.base_ref }}" "HEAD"
+
+      - name: Commit bump, if any
+        run: |
+          if git diff --quiet -- reference.json; then
+            echo "No language version changes needed."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add reference.json
+          git commit -m "chore: bump language version [skip ci]"
+          git push origin "HEAD:${{ github.head_ref }}"
