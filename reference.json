@@ -30,7 +30,7 @@
     }
   },
   "nl": {
-    "version": "1.0.1",
+    "version": "1.0.2",
     "hasTiles": true,
     "dictionaries": {
       "letterlicious": "General Dutch word list sourced from Letterlicious, merged with words from OpenTaal's wordlist (5+ letter words only) to fill gaps such as present participles (deelwoorden). Not an official tournament list."
