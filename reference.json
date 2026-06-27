@@ -58,6 +58,13 @@
       "loc6": "Lista Oficială de Cuvinte (LOC) 6.0 — LOC 5.0 plus unofficial revisions from dexonline.ro not yet incorporated into an official release."
     }
   },
+  "it": {
+    "version": "1.0.0",
+    "hasTiles": true,
+    "dictionaries": {
+      "zinga": "ZINGA — Italian Scrabble word list based on the Zingarelli dictionary."
+    }
+  },
   "fa": {
     "version": "1.0.0",
     "hasTiles": false,

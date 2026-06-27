@@ -42,6 +42,7 @@ Each dictionary key matches a `<lang>/<dictionary>.txt` file 1:1. `version` is b
 | pl | sjp | yes |
 | pt | wordlist | yes |
 | ro | loc5, loc6 | yes |
+| it | zinga | yes |
 | fa | moein | no |
 | tr | kelimelik, tla | no |
 | id | kbbi | no |
@@ -62,6 +63,7 @@ Each dictionary key matches a `<lang>/<dictionary>.txt` file 1:1. `version` is b
 | pl | sjp | [kamilmielnik/scrabble-dictionaries](https://github.com/kamilmielnik/scrabble-dictionaries/blob/master/polish/sjp.txt), originally [sjp.pl/sl/growy](https://sjp.pl/sl/growy/) |
 | pt | wordlist | [pythonprobr/palavras](https://github.com/pythonprobr/palavras) (derived from the [LibreOffice pt_BR](https://github.com/LibreOffice/dictionaries/tree/master/pt_BR) spell-check dictionary). **Not** the originally-suggested [Kasama gist](https://gist.github.com/Kasama/b75f8d57432b7e9e18e49843485d69e9) — that list strips all accents (e.g. "nao" instead of "não"), which is incorrect Portuguese spelling, so a properly-accented source was used instead. |
 | ro | loc5, loc6 | [kamilmielnik/scrabble-dictionaries](https://github.com/kamilmielnik/scrabble-dictionaries/tree/master/romanian), originally [dexonline.ro/scrabble](https://dexonline.ro/scrabble) |
+| it | zinga | [scrabblewords/scrabblewords](https://github.com/scrabblewords/scrabblewords/blob/main/words/Italian/ZINGA.txt) — Zingarelli-dictionary-based Italian Scrabble word list |
 | fa | moein | [kamilmielnik/scrabble-dictionaries](https://github.com/kamilmielnik/scrabble-dictionaries/blob/master/persian/persian.txt), originally [MansourM/persian-to-persian-dictionary](https://github.com/MansourM/persian-to-persian-dictionary) (Moein dictionary). Multi-word phrase entries were filtered out to keep single playable words. |
 | tr | kelimelik | [kamilmielnik/scrabble-dictionaries](https://github.com/kamilmielnik/scrabble-dictionaries/blob/master/turkish/kelimelik.txt) — modeled on the [Kelimelik](https://scrabblecozucu.com/) database |
 | tr | tla | [kamilmielnik/scrabble-dictionaries](https://github.com/kamilmielnik/scrabble-dictionaries/blob/master/turkish/tla.txt) — Turkish Language Association (TDK) based, via [kkrypt0nn/wordlists](https://github.com/kkrypt0nn/wordlists) |
