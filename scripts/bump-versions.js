@@ -35,6 +35,13 @@ if (changedLanguages.size === 0) {
   process.exit(0);
 }
 
+const baseReferenceRaw = execFileSync(
+  'git',
+  ['show', `${baseRef}:reference.json`],
+  { cwd: root, encoding: 'utf8' },
+);
+const baseReference = JSON.parse(baseReferenceRaw);
+
 const bumpPatch = (version) => {
   const [major, minor, patch] = version.split('.').map(Number);
   return `${major}.${minor}.${patch + 1}`;
@@ -42,6 +49,10 @@ const bumpPatch = (version) => {
 
 for (const lang of changedLanguages) {
   const previous = reference[lang].version;
+  if (previous !== baseReference[lang].version) {
+    console.log(`${lang}: already bumped to ${previous} in this branch, skipping.`);
+    continue;
+  }
   reference[lang].version = bumpPatch(previous);
   console.log(`${lang}: ${previous} -> ${reference[lang].version}`);
 }
