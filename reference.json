@@ -33,7 +33,7 @@
     "version": "1.0.0",
     "hasTiles": true,
     "dictionaries": {
-      "letterlicious": "General Dutch word list sourced from Letterlicious, not an official tournament list."
+      "letterlicious": "General Dutch word list sourced from Letterlicious, merged with words from OpenTaal's wordlist (5+ letter words only) to fill gaps such as present participles (deelwoorden). Not an official tournament list."
     }
   },
   "pl": {
