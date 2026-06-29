@@ -1,6 +1,6 @@
 {
   "name": "scrabble-dictionary",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Scrabble word lists and tile distributions for multiple languages, as plain text and JSON data files.",
   "files": [
     "reference.json",
