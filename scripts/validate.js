@@ -43,8 +43,18 @@ for (const [lang, meta] of Object.entries(reference)) {
     }
   }
 
+  const frequencyPath = path.join(root, lang, 'frequency.txt');
+  const frequencyExists = fs.existsSync(frequencyPath);
+  if (frequencyExists !== Boolean(meta.hasFrequency)) {
+    fail(`language "${lang}" hasFrequency=${meta.hasFrequency} but frequency.txt exists=${frequencyExists}`);
+  }
+  if ('frequency' in (meta.dictionaries || {})) {
+    fail(`language "${lang}" declares "frequency" as a dictionary; frequency.txt is a ranked list, not a word list`);
+  }
+
   const declaredDicts = new Set(Object.keys(meta.dictionaries || {}));
   for (const file of fs.readdirSync(path.join(root, lang))) {
+    if (file === 'frequency.txt') continue;
     if (file.endsWith('.txt') && !declaredDicts.has(file.replace(/\.txt$/, ''))) {
       fail(`language "${lang}" has ${lang}/${file} not described in reference.json`);
     }

@@ -11,6 +11,10 @@ reference.json        index of every language/dictionary, with a description and
   tiles.json           letter -> { amount, points } tile distribution (omitted where no
                        reliable official distribution could be sourced — see "Tile
                        distributions" below)
+  frequency.txt        the language's most common words, one per line, most frequent
+                       first (up to 25,000; only words found in one of its dictionaries).
+                       For picking everyday words, e.g. for bots or random secrets.
+                       Not a dictionary: it is not listed under "dictionaries".
 ```
 
 `reference.json` looks like:
@@ -20,6 +24,7 @@ reference.json        index of every language/dictionary, with a description and
   "en": {
     "version": "1.0.0",
     "hasTiles": true,
+    "hasFrequency": true,
     "dictionaries": {
       "sowpods": "Collins Scrabble Words (CSW, formerly SOWPODS) — ...",
       "twl": "NASPA Word List (NWL, formerly TWL/OTCWL/OWL) — ..."
@@ -32,20 +37,20 @@ Each dictionary key matches a `<lang>/<dictionary>.txt` file 1:1. `version` is b
 
 ## Languages
 
-| Code | Dictionaries | Tiles? |
-|---|---|---|
-| en | sowpods, twl | yes |
-| fr | ods8 | yes |
-| de | wordlist | yes |
-| es | file2017, fise2 | yes |
-| nl | letterlicious | yes |
-| pl | sjp | yes |
-| pt | wordlist | yes |
-| ro | loc5, loc6 | yes |
-| it | zinga | yes |
-| fa | moein | no |
-| tr | kelimelik, tla | no |
-| id | kbbi | no |
+| Code | Dictionaries | Tiles? | Frequency? |
+|---|---|---|---|
+| en | sowpods, twl | yes | yes |
+| fr | ods8 | yes | yes |
+| de | wordlist | yes | yes |
+| es | file2017, fise2 | yes | yes |
+| nl | letterlicious | yes | yes |
+| pl | sjp | yes | yes |
+| pt | wordlist | yes | yes |
+| ro | loc5, loc6 | yes | yes |
+| it | zinga | yes | yes |
+| fa | moein | no | yes |
+| tr | kelimelik, tla | no | yes |
+| id | kbbi | no | yes |
 
 ## Sources
 
@@ -69,6 +74,10 @@ Each dictionary key matches a `<lang>/<dictionary>.txt` file 1:1. `version` is b
 | tr | tla | [kamilmielnik/scrabble-dictionaries](https://github.com/kamilmielnik/scrabble-dictionaries/blob/master/turkish/tla.txt) — Turkish Language Association (TDK) based, via [kkrypt0nn/wordlists](https://github.com/kkrypt0nn/wordlists) |
 | id | kbbi | [aryakdaniswara/kbbi-v6-wordlist](https://github.com/aryakdaniswara/kbbi-v6-wordlist) (KBBI v6.1.0). The raw list mixes in multi-word phrases, abbreviations and numerals; it was filtered down to single alphabetic words. |
 
+### Frequency lists
+
+`<lang>/frequency.txt` comes from [hermitdave/FrequencyWords](https://github.com/hermitdave/FrequencyWords) (`content/2018/<lang>/<lang>_50k.txt`, word counts from OpenSubtitles 2018), filtered to letters-only words that appear in at least one of the language's dictionaries, keeping the order and the top 25,000. Some languages end up with fewer (Portuguese, Turkish, Indonesian and Persian, where many subtitle words aren't in the word list). Regenerate with `node scripts/build-frequency.js [lang ...]`.
+
 ### Tile distributions
 
 Sourced and cross-checked against [Wikipedia: Scrabble letter distributions](https://en.wikipedia.org/wiki/Scrabble_letter_distributions) (official Mattel/Hasbro/Spear's-licensed editions), with every table re-summed to confirm it adds up to the documented total tile count before being committed.
@@ -81,6 +90,7 @@ The code in this repository (scripts, workflows) is MIT licensed. The bundled wo
 
 - **pt/wordlist.txt** is MPL-2.0 (via [pythonprobr/palavras](https://github.com/pythonprobr/palavras), itself derived from LibreOffice's MPL-2.0-licensed pt_BR dictionary).
 - **nl/letterlicious.txt** includes words merged in from [OpenTaal/opentaal-wordlist](https://github.com/OpenTaal/opentaal-wordlist), licensed under Revised BSD License (3-clause) and/or CC BY 3.0, © OpenTaal (https://opentaal.org).
+- **`*/frequency.txt`** is derived from [FrequencyWords](https://github.com/hermitdave/FrequencyWords), whose content is licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), © Hermit Dave. The derived lists are shared under the same license.
 - All other word lists: no explicit license is stated by their upstream source (see the table above). They are widely redistributed/archived as-is (e.g. by `kamilmielnik/scrabble-dictionaries`), but if you plan to redistribute or use this data commercially, verify the terms of the original source yourself first.
 
 ## Versioning
@@ -107,8 +117,10 @@ const fs = require('fs');
 const reference = JSON.parse(fs.readFileSync('node_modules/scrabble-dictionary/reference.json'));
 const words = fs.readFileSync('node_modules/scrabble-dictionary/en/sowpods.txt', 'utf8').split('\n');
 const tiles = JSON.parse(fs.readFileSync('node_modules/scrabble-dictionary/en/tiles.json'));
+const common = fs.readFileSync('node_modules/scrabble-dictionary/en/frequency.txt', 'utf8').split('
+'); // most frequent first
 ```
 
 ## Contributing
 
-Run `npm run validate` before opening a PR — it checks that `reference.json` stays consistent with the files on disk (every declared dictionary has a matching `.txt` file, every `.txt` file is declared, `hasTiles` matches whether `tiles.json` exists, and `tiles.json` values are well-formed).
+Run `npm run validate` before opening a PR — it checks that `reference.json` stays consistent with the files on disk (every declared dictionary has a matching `.txt` file, every other `.txt` file is declared, `hasTiles` matches whether `tiles.json` exists, `hasFrequency` matches whether `frequency.txt` exists, and `tiles.json` values are well-formed).

@@ -2,6 +2,7 @@
   "en": {
     "version": "1.0.0",
     "hasTiles": true,
+    "hasFrequency": true,
     "dictionaries": {
       "sowpods": "Collins Scrabble Words (CSW, formerly SOWPODS) — the word list used in English-language tournament Scrabble in most countries except the US, Thailand and Canada.",
       "twl": "NASPA Word List (NWL, formerly TWL/OTCWL/OWL) — the official word list for tournament Scrabble in the USA and Canada."
@@ -10,6 +11,7 @@
   "fr": {
     "version": "1.0.0",
     "hasTiles": true,
+    "hasFrequency": true,
     "dictionaries": {
       "ods8": "Officiel du Dictionnaire Scrabble, 8th edition (ODS8) — the official French-language tournament Scrabble word list."
     }
@@ -17,6 +19,7 @@
   "de": {
     "version": "1.0.0",
     "hasTiles": true,
+    "hasFrequency": true,
     "dictionaries": {
       "wordlist": "General German word list (used by the Tanglet word-game project), not an official tournament list."
     }
@@ -24,6 +27,7 @@
   "es": {
     "version": "1.0.0",
     "hasTiles": true,
+    "hasFrequency": true,
     "dictionaries": {
       "file2017": "Lexicón FILE 2017 — official word list of the Federación Internacional de Léxico en Español (FILE).",
       "fise2": "Lexicón FISE-2 2009 — official word list of the Federación Internacional de Scrabble en Español (FISE)."
@@ -32,6 +36,7 @@
   "nl": {
     "version": "1.0.4",
     "hasTiles": true,
+    "hasFrequency": true,
     "dictionaries": {
       "letterlicious": "General Dutch word list sourced from Letterlicious, merged with words from OpenTaal's wordlist (5+ letter words only) to fill gaps such as present participles (deelwoorden). Not an official tournament list."
     }
@@ -39,6 +44,7 @@
   "pl": {
     "version": "1.0.0",
     "hasTiles": true,
+    "hasFrequency": true,
     "dictionaries": {
       "sjp": "SJP.PL \"growy\" (game) word list — a Polish dictionary and orthographic word list curated for word games."
     }
@@ -46,6 +52,7 @@
   "pt": {
     "version": "1.0.0",
     "hasTiles": true,
+    "hasFrequency": true,
     "dictionaries": {
       "wordlist": "Brazilian Portuguese word list derived from the LibreOffice pt_BR spell-check dictionary, expanded to include compound-word components."
     }
@@ -53,6 +60,7 @@
   "ro": {
     "version": "1.0.0",
     "hasTiles": true,
+    "hasFrequency": true,
     "dictionaries": {
       "loc5": "Lista Oficială de Cuvinte (LOC) 5.0 — the last fully official Romanian Scrabble word list.",
       "loc6": "Lista Oficială de Cuvinte (LOC) 6.0 — LOC 5.0 plus unofficial revisions from dexonline.ro not yet incorporated into an official release."
@@ -61,6 +69,7 @@
   "it": {
     "version": "1.0.0",
     "hasTiles": true,
+    "hasFrequency": true,
     "dictionaries": {
       "zinga": "ZINGA — Italian Scrabble word list based on the Zingarelli dictionary."
     }
@@ -68,6 +77,7 @@
   "fa": {
     "version": "1.0.0",
     "hasTiles": false,
+    "hasFrequency": true,
     "dictionaries": {
       "moein": "Word list extracted from the Moein Persian-to-Persian dictionary. No official/standard tile distribution could be confidently sourced, so tiles.json is omitted for this language."
     }
@@ -75,6 +85,7 @@
   "tr": {
     "version": "1.0.0",
     "hasTiles": false,
+    "hasFrequency": true,
     "dictionaries": {
       "kelimelik": "Word list modeled to closely match the database used by the Kelimelik mobile word game.",
       "tla": "Word list based on the Turkish Language Association (TDK) dictionary — includes abbreviations, chemical symbols, etc. not normally valid in word games."
@@ -83,6 +94,7 @@
   "id": {
     "version": "1.0.0",
     "hasTiles": false,
+    "hasFrequency": true,
     "dictionaries": {
       "kbbi": "Single-word list cleaned from KBBI v6.1.0 (Kamus Besar Bahasa Indonesia), Indonesia's official dictionary. No official/standard tile distribution could be confidently sourced, so tiles.json is omitted for this language."
     }
