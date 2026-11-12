@@ -1,7 +1,7 @@
 {
   "name": "scrabble-dictionary",
-  "version": "1.0.2",
-  "description": "Scrabble word lists and tile distributions for multiple languages, as plain text and JSON data files.",
+  "version": "1.1.0",
+  "description": "Scrabble word lists, tile distributions and common-word frequency lists for multiple languages, as plain text and JSON data files.",
   "files": [
     "reference.json",
     "*/*.txt",
@@ -13,7 +13,8 @@
     "wordlist",
     "tiles",
     "words",
-    "game"
+    "game",
+    "frequency"
   ],
   "license": "MIT",
   "repository": {
@@ -26,6 +27,7 @@
   },
   "scripts": {
     "validate": "node scripts/validate.js",
-    "bump-versions": "node scripts/bump-versions.js"
+    "bump-versions": "node scripts/bump-versions.js",
+    "build-frequency": "node scripts/build-frequency.js"
   }
 }
