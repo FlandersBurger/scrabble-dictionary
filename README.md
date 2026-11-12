@@ -53,8 +53,8 @@ Each dictionary key matches a `<lang>/<dictionary>.txt` file 1:1. `version` is b
 | tr | kelimelik, tla | no | yes |
 | id | kbbi | no | yes |
 | ca | disc | yes | yes |
-| da | cor | [Det Centrale Ordregister (COR)](https://ordregister.dk/) 1.5.1.0, which records every inflected form of the words in Retskrivningsordbogen, 5th edition (2024). Filtered by Dansk Scrabbleforening's [reading guide to Retskrivningsordbogen](https://scrabbleforening.wordpress.com/regler/) (2 March 2026). That means: no proper nouns, abbreviations, or forms with apostrophes or hyphens; nouns take genitive -s, and pronouns only the 25 genitives the guide lists; past participles take no definite or plural forms; modal verbs have no imperative, passive or present participle; adjectives can be compared. Passive past tense (*spistes*) counts only where the dictionary lists it, which COR doesn't record, so it's left out. COR generates comparisons for every adjective, so a few odd ones (*førsteste*) slip in. |
-| sv | saol | Headwords of [SAOL 14](https://spraakbanken.gu.se/en/resources/saol14-faksimil) (Svenska Akademiens ordlista, 14th edition, digitized by Språkbanken). [Svenska Scrabbleförbundet's rules](https://scrabbleforbundet.se/regler/) allow only SAOL's bold headwords, not their inflections, so none are added. Multi-word entries count only for verbs, and then only the first word (*arta sig* → *arta*). Two gaps: the federation plays SAOL 15 (2026) plus its own supplementary list, and this data lacks the bold forms SAOL nests inside other entries (e.g. *ögon* under *öga*). |
+| da | cor | yes | yes |
+| sv | saol | yes | yes |
 
 ## Sources
 
@@ -78,8 +78,8 @@ Each dictionary key matches a `<lang>/<dictionary>.txt` file 1:1. `version` is b
 | tr | tla | [kamilmielnik/scrabble-dictionaries](https://github.com/kamilmielnik/scrabble-dictionaries/blob/master/turkish/tla.txt) — Turkish Language Association (TDK) based, via [kkrypt0nn/wordlists](https://github.com/kkrypt0nn/wordlists) |
 | id | kbbi | [aryakdaniswara/kbbi-v6-wordlist](https://github.com/aryakdaniswara/kbbi-v6-wordlist) (KBBI v6.1.0). The raw list mixes in multi-word phrases, abbreviations and numerals; it was filtered down to single alphabetic words. |
 | ca | disc | [kamilmielnik/scrabble-dictionaries](https://github.com/kamilmielnik/scrabble-dictionaries/blob/master/catalan/disc.txt), originally [jmontane/disc](https://github.com/jmontane/disc) — the Diccionari Informatitzat de l'Scrabble en Català, based on the DIEC. Entries keep the "l·l" of the ela geminada. |
-| da | cor | [Det Centrale Ordregister (COR)](https://ordregister.dk/) 1.5.1.0, which records every inflected form of the words in Retskrivningsordbogen, 5th edition (2024). Only forms marked as listed in Retskrivningsordbogen are kept (normering `N`). That leaves out the genitives COR generates (`K`, e.g. *husets*) and the generated adjective forms it doesn't vouch for (`U`, e.g. *førsteste*). Proper nouns, abbreviations, prefixes, suffixes, Roman numerals and any form that isn't all lowercase letters are also dropped. |
-| sv | saol | Headwords of [SAOL 14](https://spraakbanken.gu.se/en/resources/saol14-faksimil) (Svenska Akademiens ordlista, 14th edition, digitized by Språkbanken), expanded with their inflected forms from [SALDO's morphology](https://spraakbanken.gu.se/en/resources/saldom). A SALDO entry is used only when its lemma is a SAOL headword with a matching part of speech. Genitives, compound-only forms (e.g. *upphäv-*), proper nouns and anything that isn't all lowercase letters are left out. |
+| da | cor | [Det Centrale Ordregister (COR)](https://ordregister.dk/) 1.5.1.0, which records every inflected form of the words in Retskrivningsordbogen, 5th edition (2024). Filtered by Dansk Scrabbleforening's [reading guide to Retskrivningsordbogen](https://scrabbleforening.wordpress.com/regler/) (2 March 2026). That means: no proper nouns, abbreviations, or forms with apostrophes or hyphens; nouns take genitive -s, and pronouns only the 25 genitives the guide lists; past participles take no definite or plural forms; modal verbs have no imperative, passive or present participle; adjectives can be compared. Passive past tense (*spistes*) counts only where the dictionary lists it, which COR doesn't record, so it's left out. COR generates comparisons for every adjective, so a few odd ones (*førsteste*) slip in. |
+| sv | saol | Headwords of [SAOL 14](https://spraakbanken.gu.se/en/resources/saol14-faksimil) (Svenska Akademiens ordlista, 14th edition, digitized by Språkbanken). [Svenska Scrabbleförbundet's rules](https://scrabbleforbundet.se/regler/) allow only SAOL's bold headwords, not their inflections, so none are added. Multi-word entries count only for verbs, and then only the first word (*arta sig* → *arta*). Two gaps: the federation plays SAOL 15 (2026) plus its own supplementary list, and this data lacks the bold forms SAOL nests inside other entries (e.g. *ögon* under *öga*). |
 
 `ca`, `da` and `sv` are built rather than copied: regenerate them with `npm run import-lists -- [lang ...]`.
 
@@ -113,6 +113,8 @@ The code in this repository (scripts, workflows) is MIT licensed. The bundled wo
 - sorted in strictly increasing UTF-8 byte order, so there are no duplicates
 
 Byte order is not alphabetical order for accented letters (`ą` sorts after `z`), but it makes the raw file binary-searchable: words and prefixes can be looked up in the file's bytes without turning every line into a string first (see "Usage"). A few lists contain entries that aren't letters only, such as apostrophes or hyphens (Turkish `tla`, Persian, a handful of Dutch words). Skip those if you only want letter words, but keep Catalan's "l·l": it's a letter, and has its own tile.
+
+Lists keep accents even where the board doesn't: if `tiles.json` has no tile for an accented letter, that letter is played as its plain form. Catalan and Swedish, for example, play *é* with an E tile (but Catalan's *ç* and Swedish's *å*, *ä* and *ö* have their own tiles).
 
 `frequency.txt` is not sorted this way: it is in rank order, most frequent first.
 
@@ -181,4 +183,4 @@ function isWord(word) {
 
 ## Contributing
 
-Run `npm run sort-lists` after adding or editing a word list, then `npm run validate` before opening a PR. The validator checks that every word list is in the canonical format above, and that `reference.json` stays consistent with the files on disk (every declared dictionary has a matching `.txt` file, every other `.txt` file is declared, `hasTiles` matches whether `tiles.json` exists, `hasFrequency` matches whether `frequency.txt` exists, and `tiles.json` values are well-formed).
+Run `npm run sort-lists` after adding or editing a word list (the lists built by `npm run import-lists`, `ca`, `da` and `sv`, come out sorted already; change the script rather than the `.txt` files), then `npm run validate` before opening a PR. The validator checks that every word list is in the canonical format above, and that `reference.json` stays consistent with the files on disk (every declared dictionary has a matching `.txt` file, every other `.txt` file is declared, `hasTiles` matches whether `tiles.json` exists, `hasFrequency` matches whether `frequency.txt` exists, and `tiles.json` values are well-formed).
