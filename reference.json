@@ -1,6 +1,6 @@
 {
   "en": {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "hasTiles": true,
     "hasFrequency": true,
     "dictionaries": {
@@ -9,7 +9,7 @@
     }
   },
   "fr": {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "hasTiles": true,
     "hasFrequency": true,
     "dictionaries": {
@@ -17,7 +17,7 @@
     }
   },
   "de": {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "hasTiles": true,
     "hasFrequency": true,
     "dictionaries": {
@@ -25,7 +25,7 @@
     }
   },
   "es": {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "hasTiles": true,
     "hasFrequency": true,
     "dictionaries": {
@@ -34,7 +34,7 @@
     }
   },
   "nl": {
-    "version": "1.0.4",
+    "version": "1.0.5",
     "hasTiles": true,
     "hasFrequency": true,
     "dictionaries": {
@@ -42,7 +42,7 @@
     }
   },
   "pl": {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "hasTiles": true,
     "hasFrequency": true,
     "dictionaries": {
@@ -50,7 +50,7 @@
     }
   },
   "pt": {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "hasTiles": true,
     "hasFrequency": true,
     "dictionaries": {
@@ -58,7 +58,7 @@
     }
   },
   "ro": {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "hasTiles": true,
     "hasFrequency": true,
     "dictionaries": {
@@ -67,7 +67,7 @@
     }
   },
   "it": {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "hasTiles": true,
     "hasFrequency": true,
     "dictionaries": {
@@ -75,7 +75,7 @@
     }
   },
   "fa": {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "hasTiles": false,
     "hasFrequency": true,
     "dictionaries": {
@@ -83,7 +83,7 @@
     }
   },
   "tr": {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "hasTiles": false,
     "hasFrequency": true,
     "dictionaries": {
@@ -92,7 +92,7 @@
     }
   },
   "id": {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "hasTiles": false,
     "hasFrequency": true,
     "dictionaries": {
