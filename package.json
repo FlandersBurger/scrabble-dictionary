@@ -1,6 +1,6 @@
 {
   "name": "scrabble-dictionary",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Scrabble word lists, tile distributions and common-word frequency lists for multiple languages, as plain text and JSON data files.",
   "files": [
     "reference.json",
