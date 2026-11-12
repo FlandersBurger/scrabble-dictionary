@@ -120,7 +120,7 @@ Lists keep accents even where the board doesn't: if `tiles.json` has no tile for
 
 ## Versioning
 
-Each language has its own `version` field in `reference.json`, independent of the npm package version. When a pull request changes any file inside a language folder (e.g. `en/`), a GitHub Action bumps that language's patch version automatically and pushes the bump onto the PR branch before merge — so the per-language version always reflects a real content change, not a manual/sometimes-forgotten step.
+Each language has its own `version` field in `reference.json`, independent of the npm package version. When a pull request changes any file inside a language folder (e.g. `en/`), a GitHub Action bumps that language's patch version automatically (a language the PR adds keeps the version it was added with) and pushes the bump onto the PR branch before merge — so the per-language version always reflects a real content change, not a manual/sometimes-forgotten step.
 
 This only works automatically for PRs from branches within this repository (GitHub's `GITHUB_TOKEN` can't push to fork branches). For PRs from forks, bump `version` for any language you touched by hand before merging.
 
