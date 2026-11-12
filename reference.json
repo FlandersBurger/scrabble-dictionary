@@ -1,6 +1,6 @@
 {
   "en": {
-    "version": "1.0.1",
+    "version": "1.0.2",
     "hasTiles": true,
     "hasFrequency": true,
     "dictionaries": {
@@ -9,7 +9,7 @@
     }
   },
   "fr": {
-    "version": "1.0.1",
+    "version": "1.0.2",
     "hasTiles": true,
     "hasFrequency": true,
     "dictionaries": {
@@ -17,7 +17,7 @@
     }
   },
   "de": {
-    "version": "1.0.1",
+    "version": "1.0.2",
     "hasTiles": true,
     "hasFrequency": true,
     "dictionaries": {
@@ -25,7 +25,7 @@
     }
   },
   "es": {
-    "version": "1.0.1",
+    "version": "1.0.2",
     "hasTiles": true,
     "hasFrequency": true,
     "dictionaries": {
@@ -42,7 +42,7 @@
     }
   },
   "pl": {
-    "version": "1.0.1",
+    "version": "1.0.2",
     "hasTiles": true,
     "hasFrequency": true,
     "dictionaries": {
@@ -58,7 +58,7 @@
     }
   },
   "ro": {
-    "version": "1.0.1",
+    "version": "1.0.2",
     "hasTiles": true,
     "hasFrequency": true,
     "dictionaries": {
@@ -83,7 +83,7 @@
     }
   },
   "tr": {
-    "version": "1.0.1",
+    "version": "1.0.2",
     "hasTiles": false,
     "hasFrequency": true,
     "dictionaries": {
