@@ -1,6 +1,6 @@
 {
   "name": "scrabble-dictionary",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Scrabble word lists, tile distributions and common-word frequency lists for multiple languages, as plain text and JSON data files.",
   "files": [
     "reference.json",
@@ -28,6 +28,7 @@
   "scripts": {
     "validate": "node scripts/validate.js",
     "bump-versions": "node scripts/bump-versions.js",
-    "build-frequency": "node scripts/build-frequency.js"
+    "build-frequency": "node scripts/build-frequency.js",
+    "sort-lists": "node scripts/sort-lists.js"
   }
 }

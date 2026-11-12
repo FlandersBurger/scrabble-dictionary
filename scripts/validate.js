@@ -4,6 +4,38 @@ const path = require('path');
 const root = path.join(__dirname, '..');
 const reference = JSON.parse(fs.readFileSync(path.join(root, 'reference.json'), 'utf8'));
 
+/**
+ * Why a word list isn't in canonical form, or null when it is: lowercase NFC words,
+ * one per line, strictly increasing in UTF-8 byte order (so no duplicates), no
+ * blank lines or carriage returns, ending with a single newline. Works on the raw
+ * bytes so even Polish's 42 MB list never becomes millions of strings.
+ */
+function listProblem(bytes) {
+  if (bytes.length === 0 || bytes[bytes.length - 1] !== 0x0a) return 'does not end with a newline';
+  if (bytes.includes(0x0d)) return 'has carriage returns';
+  let start = 0;
+  let previous = null;
+  let line = 1;
+  for (let i = 0; i < bytes.length; i++) {
+    if (bytes[i] !== 0x0a) continue;
+    const word = bytes.subarray(start, i);
+    if (word.length === 0) return `has a blank line at line ${line}`;
+    if (previous && Buffer.compare(previous, word) >= 0) {
+      return `is not in strictly increasing byte order at line ${line} ("${previous}" then "${word}")`;
+    }
+    // Only words with non-ASCII or uppercase letters need the string checks.
+    if (word.some((b) => b >= 0x80 || (b >= 0x41 && b <= 0x5a))) {
+      const text = word.toString('utf8');
+      if (text !== text.toLowerCase()) return `has an uppercase word at line ${line} ("${text}")`;
+      if (text !== text.normalize('NFC')) return `has a word not in NFC at line ${line} ("${text}")`;
+    }
+    previous = word;
+    start = i + 1;
+    line++;
+  }
+  return null;
+}
+
 let ok = true;
 const fail = (message) => {
   ok = false;
@@ -40,7 +72,10 @@ for (const [lang, meta] of Object.entries(reference)) {
     const txtPath = path.join(root, lang, `${dict}.txt`);
     if (!fs.existsSync(txtPath)) {
       fail(`language "${lang}" dictionary "${dict}" is missing ${lang}/${dict}.txt`);
+      continue;
     }
+    const problem = listProblem(fs.readFileSync(txtPath));
+    if (problem) fail(`${lang}/${dict}.txt ${problem} (run npm run sort-lists)`);
   }
 
   const frequencyPath = path.join(root, lang, 'frequency.txt');

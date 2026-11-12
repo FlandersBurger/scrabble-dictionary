@@ -7,7 +7,8 @@ Scrabble word lists, tile distributions and common-word frequency lists for mult
 ```
 reference.json        index of every language/dictionary, with a description and a version
 <lang>/                two-letter language code (en, fr, de, ...)
-  <dictionary>.txt     one word per line, e.g. en/sowpods.txt, en/twl.txt
+  <dictionary>.txt     one word per line, e.g. en/sowpods.txt, en/twl.txt; lowercase,
+                       NFC, sorted by UTF-8 byte order (see "Word list format" below)
   tiles.json           letter -> { amount, points } tile distribution (omitted where no
                        reliable official distribution could be sourced — see "Tile
                        distributions" below)
@@ -93,6 +94,18 @@ The code in this repository (scripts, workflows) is MIT licensed. The bundled wo
 - **`*/frequency.txt`** is derived from [FrequencyWords](https://github.com/hermitdave/FrequencyWords), whose content is licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), © Hermit Dave. The derived lists are shared under the same license.
 - All other word lists: no explicit license is stated by their upstream source (see the table above). They are widely redistributed/archived as-is (e.g. by `kamilmielnik/scrabble-dictionaries`), but if you plan to redistribute or use this data commercially, verify the terms of the original source yourself first.
 
+## Word list format
+
+`npm run validate` (which runs in CI) guarantees that every `<dictionary>.txt` is:
+
+- one word per line, every line ending in `\n` (the last one too), no `\r`, no blank lines
+- lowercase and Unicode NFC
+- sorted in strictly increasing UTF-8 byte order, so there are no duplicates
+
+Byte order is not alphabetical order for accented letters (`ą` sorts after `z`), but it makes the raw file binary-searchable: words and prefixes can be looked up in the file's bytes without turning every line into a string first (see "Usage"). A few lists contain entries that aren't letters only, such as apostrophes or hyphens (Turkish `tla`, Persian, a handful of Dutch words). Skip those if you only want letter words.
+
+`frequency.txt` is not sorted this way: it is in rank order, most frequent first.
+
 ## Versioning
 
 Each language has its own `version` field in `reference.json`, independent of the npm package version. When a pull request changes any file inside a language folder (e.g. `en/`), a GitHub Action bumps that language's patch version automatically and pushes the bump onto the PR branch before merge — so the per-language version always reflects a real content change, not a manual/sometimes-forgotten step.
@@ -114,12 +127,48 @@ No JS API is published — read the files directly:
 
 ```js
 const fs = require('fs');
-const reference = JSON.parse(fs.readFileSync('node_modules/scrabble-dictionary/reference.json'));
-const words = fs.readFileSync('node_modules/scrabble-dictionary/en/sowpods.txt', 'utf8').split('\n');
-const tiles = JSON.parse(fs.readFileSync('node_modules/scrabble-dictionary/en/tiles.json'));
-const common = fs.readFileSync('node_modules/scrabble-dictionary/en/frequency.txt', 'utf8').split('\n'); // most frequent first
+const dir = 'node_modules/scrabble-dictionary';
+const reference = JSON.parse(fs.readFileSync(`${dir}/reference.json`));
+const tiles = JSON.parse(fs.readFileSync(`${dir}/en/tiles.json`));
+const common = fs.readFileSync(`${dir}/en/frequency.txt`, 'utf8').split('\n').filter(Boolean); // most frequent first
+```
+
+For the smaller lists, a `Set` is fine:
+
+```js
+const words = new Set(fs.readFileSync(`${dir}/en/sowpods.txt`, 'utf8').split('\n').filter(Boolean));
+```
+
+Watch the memory with the big ones. `pl/sjp.txt` is 42 MB and 3.2 million words: as JS strings in a `Set` that is several hundred MB of heap. Because every list is byte-sorted (see "Word list format"), you can keep the raw bytes instead (about the file's size plus 4 bytes per word) and binary-search them:
+
+```js
+const bytes = fs.readFileSync(`${dir}/pl/sjp.txt`); // a Buffer, not a string
+let count = 0;
+for (const b of bytes) if (b === 0x0a) count++;
+// offsets[i] is where word i starts; offsets[count] is the end of the file.
+const offsets = new Uint32Array(count + 1);
+for (let i = 0, w = 1; i < bytes.length; i++) if (bytes[i] === 0x0a) offsets[w++] = i + 1;
+const wordAt = (i) => bytes.subarray(offsets[i], offsets[i + 1] - 1);
+
+/** Index of the first word >= target (a Buffer). Prefix checks use the same search. */
+function lowerBound(target) {
+  let lo = 0;
+  let hi = count;
+  while (lo < hi) {
+    const mid = (lo + hi) >>> 1;
+    if (Buffer.compare(wordAt(mid), target) < 0) lo = mid + 1;
+    else hi = mid;
+  }
+  return lo;
+}
+
+function isWord(word) {
+  const target = Buffer.from(word);
+  const i = lowerBound(target);
+  return i < count && wordAt(i).equals(target);
+}
 ```
 
 ## Contributing
 
-Run `npm run validate` before opening a PR — it checks that `reference.json` stays consistent with the files on disk (every declared dictionary has a matching `.txt` file, every other `.txt` file is declared, `hasTiles` matches whether `tiles.json` exists, `hasFrequency` matches whether `frequency.txt` exists, and `tiles.json` values are well-formed).
+Run `npm run sort-lists` after adding or editing a word list, then `npm run validate` before opening a PR. The validator checks that every word list is in the canonical format above, and that `reference.json` stays consistent with the files on disk (every declared dictionary has a matching `.txt` file, every other `.txt` file is declared, `hasTiles` matches whether `tiles.json` exists, `hasFrequency` matches whether `frequency.txt` exists, and `tiles.json` values are well-formed).
