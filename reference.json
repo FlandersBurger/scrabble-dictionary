@@ -98,5 +98,29 @@
     "dictionaries": {
       "kbbi": "Single-word list cleaned from KBBI v6.1.0 (Kamus Besar Bahasa Indonesia), Indonesia's official dictionary. No official/standard tile distribution could be confidently sourced, so tiles.json is omitted for this language."
     }
+  },
+  "ca": {
+    "version": "1.0.0",
+    "hasTiles": true,
+    "hasFrequency": true,
+    "dictionaries": {
+      "disc": "Diccionari Informatitzat de l’Scrabble en Català (DISC) — Catalan Scrabble word list based on the DIEC (Institut d’Estudis Catalans dictionary). The ela geminada is written \"l·l\", matching its single tile."
+    }
+  },
+  "da": {
+    "version": "1.0.0",
+    "hasTiles": true,
+    "hasFrequency": true,
+    "dictionaries": {
+      "cor": "Danish word forms from Det Centrale Ordregister (COR, the register behind Retskrivningsordbogen), filtered by Dansk Scrabbleforening’s reading guide to Retskrivningsordbogen: inflections and noun genitives included; proper nouns, abbreviations and forms the guide rules out (e.g. definite/plural past participles) excluded."
+    }
+  },
+  "sv": {
+    "version": "1.0.0",
+    "hasTiles": true,
+    "hasFrequency": true,
+    "dictionaries": {
+      "saol": "Headwords of Svenska Akademiens ordlista, 14th edition (SAOL 14). Following Svenska Scrabbleförbundet’s rules, only headwords count, not their inflections. The federation now plays SAOL 15, so a few words differ."
+    }
   }
 }

@@ -49,6 +49,10 @@ const bumpPatch = (version) => {
 
 for (const lang of changedLanguages) {
   const previous = reference[lang].version;
+  if (!baseReference[lang]) {
+    console.log(`${lang}: new language, keeping ${previous}.`);
+    continue;
+  }
   if (previous !== baseReference[lang].version) {
     console.log(`${lang}: already bumped to ${previous} in this branch, skipping.`);
     continue;
