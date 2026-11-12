@@ -1,6 +1,6 @@
 # scrabble-dictionary
 
-Scrabble word lists and tile distributions for multiple languages, shipped as plain data files (no runtime code) so you can use them from any language or tool.
+Scrabble word lists, tile distributions and common-word frequency lists for multiple languages, shipped as plain data files (no runtime code) so you can use them from any language or tool.
 
 ## Structure
 
@@ -76,7 +76,7 @@ Each dictionary key matches a `<lang>/<dictionary>.txt` file 1:1. `version` is b
 
 ### Frequency lists
 
-`<lang>/frequency.txt` comes from [hermitdave/FrequencyWords](https://github.com/hermitdave/FrequencyWords) (`content/2018/<lang>/<lang>_50k.txt`, word counts from OpenSubtitles 2018), filtered to letters-only words that appear in at least one of the language's dictionaries, keeping the order and the top 25,000. Some languages end up with fewer (Portuguese, Turkish, Indonesian and Persian, where many subtitle words aren't in the word list). Regenerate with `node scripts/build-frequency.js [lang ...]`.
+`<lang>/frequency.txt` comes from [hermitdave/FrequencyWords](https://github.com/hermitdave/FrequencyWords) (`content/2018/<lang>/<lang>_50k.txt`, word counts from OpenSubtitles 2018), filtered to letters-only words that appear in at least one of the language's dictionaries, keeping the order and the top 25,000. Some languages end up with fewer (Portuguese, Turkish, Indonesian and Persian, where many subtitle words aren't in the word list). Regenerate with `npm run build-frequency -- [lang ...]`.
 
 ### Tile distributions
 
@@ -117,8 +117,7 @@ const fs = require('fs');
 const reference = JSON.parse(fs.readFileSync('node_modules/scrabble-dictionary/reference.json'));
 const words = fs.readFileSync('node_modules/scrabble-dictionary/en/sowpods.txt', 'utf8').split('\n');
 const tiles = JSON.parse(fs.readFileSync('node_modules/scrabble-dictionary/en/tiles.json'));
-const common = fs.readFileSync('node_modules/scrabble-dictionary/en/frequency.txt', 'utf8').split('
-'); // most frequent first
+const common = fs.readFileSync('node_modules/scrabble-dictionary/en/frequency.txt', 'utf8').split('\n'); // most frequent first
 ```
 
 ## Contributing
