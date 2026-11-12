@@ -29,6 +29,7 @@
     "validate": "node scripts/validate.js",
     "bump-versions": "node scripts/bump-versions.js",
     "build-frequency": "node scripts/build-frequency.js",
-    "sort-lists": "node scripts/sort-lists.js"
+    "sort-lists": "node scripts/sort-lists.js",
+    "import-lists": "node scripts/import-lists.js"
   }
 }

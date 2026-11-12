@@ -52,6 +52,9 @@ Each dictionary key matches a `<lang>/<dictionary>.txt` file 1:1. `version` is b
 | fa | moein | no | yes |
 | tr | kelimelik, tla | no | yes |
 | id | kbbi | no | yes |
+| ca | disc | yes | yes |
+| da | cor | yes | yes |
+| sv | saol | yes | yes |
 
 ## Sources
 
@@ -74,10 +77,15 @@ Each dictionary key matches a `<lang>/<dictionary>.txt` file 1:1. `version` is b
 | tr | kelimelik | [kamilmielnik/scrabble-dictionaries](https://github.com/kamilmielnik/scrabble-dictionaries/blob/master/turkish/kelimelik.txt) — modeled on the [Kelimelik](https://scrabblecozucu.com/) database |
 | tr | tla | [kamilmielnik/scrabble-dictionaries](https://github.com/kamilmielnik/scrabble-dictionaries/blob/master/turkish/tla.txt) — Turkish Language Association (TDK) based, via [kkrypt0nn/wordlists](https://github.com/kkrypt0nn/wordlists) |
 | id | kbbi | [aryakdaniswara/kbbi-v6-wordlist](https://github.com/aryakdaniswara/kbbi-v6-wordlist) (KBBI v6.1.0). The raw list mixes in multi-word phrases, abbreviations and numerals; it was filtered down to single alphabetic words. |
+| ca | disc | [kamilmielnik/scrabble-dictionaries](https://github.com/kamilmielnik/scrabble-dictionaries/blob/master/catalan/disc.txt), originally [jmontane/disc](https://github.com/jmontane/disc) — the Diccionari Informatitzat de l'Scrabble en Català, based on the DIEC. Entries keep the "l·l" of the ela geminada. |
+| da | cor | [Det Centrale Ordregister (COR)](https://ordregister.dk/) 1.5.1.0, which records every inflected form of the words in Retskrivningsordbogen, 5th edition (2024). Only forms marked as listed in Retskrivningsordbogen are kept (normering `N`). That leaves out the genitives COR generates (`K`, e.g. *husets*) and the generated adjective forms it doesn't vouch for (`U`, e.g. *førsteste*). Proper nouns, abbreviations, prefixes, suffixes, Roman numerals and any form that isn't all lowercase letters are also dropped. |
+| sv | saol | Headwords of [SAOL 14](https://spraakbanken.gu.se/en/resources/saol14-faksimil) (Svenska Akademiens ordlista, 14th edition, digitized by Språkbanken), expanded with their inflected forms from [SALDO's morphology](https://spraakbanken.gu.se/en/resources/saldom). A SALDO entry is used only when its lemma is a SAOL headword with a matching part of speech. Genitives, compound-only forms (e.g. *upphäv-*), proper nouns and anything that isn't all lowercase letters are left out. |
+
+`ca`, `da` and `sv` are built rather than copied: regenerate them with `npm run import-lists -- [lang ...]`.
 
 ### Frequency lists
 
-`<lang>/frequency.txt` comes from [hermitdave/FrequencyWords](https://github.com/hermitdave/FrequencyWords) (`content/2018/<lang>/<lang>_50k.txt`, word counts from OpenSubtitles 2018), filtered to letters-only words that appear in at least one of the language's dictionaries, keeping the order and the top 25,000. Some languages end up with fewer (Portuguese, Turkish, Indonesian and Persian, where many subtitle words aren't in the word list). Regenerate with `npm run build-frequency -- [lang ...]`.
+`<lang>/frequency.txt` comes from [hermitdave/FrequencyWords](https://github.com/hermitdave/FrequencyWords) (`content/2018/<lang>/<lang>_50k.txt`, word counts from OpenSubtitles 2018), filtered to letters-only words that appear in at least one of the language's dictionaries, keeping the order and the top 25,000. The Catalan source drops the middle dot of "l·l" (it has *collegi* for *col·legi*), so Catalan's list has no "l·l" words. Some languages end up with fewer (Portuguese, Turkish, Indonesian and Persian, where many subtitle words aren't in the word list). Regenerate with `npm run build-frequency -- [lang ...]`.
 
 ### Tile distributions
 
@@ -91,6 +99,8 @@ The code in this repository (scripts, workflows) is MIT licensed. The bundled wo
 
 - **pt/wordlist.txt** is MPL-2.0 (via [pythonprobr/palavras](https://github.com/pythonprobr/palavras), itself derived from LibreOffice's MPL-2.0-licensed pt_BR dictionary).
 - **nl/letterlicious.txt** includes words merged in from [OpenTaal/opentaal-wordlist](https://github.com/OpenTaal/opentaal-wordlist), licensed under Revised BSD License (3-clause) and/or CC BY 3.0, © OpenTaal (https://opentaal.org).
+- **da/cor.txt** is derived from [COR](https://ordregister.dk/), which is in the public domain (CC0 1.0).
+- **sv/saol.txt** is derived from Språkbanken's [SAOL 14 faksimil](https://spraakbanken.gu.se/en/resources/saol14-faksimil) and [SALDO morphology](https://spraakbanken.gu.se/en/resources/saldom), both published by Språkbanken Text (University of Gothenburg) under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); SAOL itself is by Svenska Akademien. The list was modified: filtered and expanded as described under "Sources".
 - **`*/frequency.txt`** is derived from [FrequencyWords](https://github.com/hermitdave/FrequencyWords), whose content is licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), © Hermit Dave. The derived lists are shared under the same license.
 - All other word lists: no explicit license is stated by their upstream source (see the table above). They are widely redistributed/archived as-is (e.g. by `kamilmielnik/scrabble-dictionaries`), but if you plan to redistribute or use this data commercially, verify the terms of the original source yourself first.
 
@@ -102,7 +112,7 @@ The code in this repository (scripts, workflows) is MIT licensed. The bundled wo
 - lowercase and Unicode NFC
 - sorted in strictly increasing UTF-8 byte order, so there are no duplicates
 
-Byte order is not alphabetical order for accented letters (`ą` sorts after `z`), but it makes the raw file binary-searchable: words and prefixes can be looked up in the file's bytes without turning every line into a string first (see "Usage"). A few lists contain entries that aren't letters only, such as apostrophes or hyphens (Turkish `tla`, Persian, a handful of Dutch words). Skip those if you only want letter words.
+Byte order is not alphabetical order for accented letters (`ą` sorts after `z`), but it makes the raw file binary-searchable: words and prefixes can be looked up in the file's bytes without turning every line into a string first (see "Usage"). A few lists contain entries that aren't letters only, such as apostrophes or hyphens (Turkish `tla`, Persian, a handful of Dutch words). Skip those if you only want letter words, but keep Catalan's "l·l": it's a letter, and has its own tile.
 
 `frequency.txt` is not sorted this way: it is in rank order, most frequent first.
 
