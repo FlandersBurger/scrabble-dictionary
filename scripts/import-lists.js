@@ -42,85 +42,54 @@ async function catalan() {
   write('ca', 'disc', words);
 }
 
-// Danish: COR (Det Centrale Ordregister), a TSV of every inflected form:
-// id, lemma, gloss, grammatical label, form, normering. Only forms with
-// normering "N" are kept: those are the ones Retskrivningsordbogen lists. "K"
-// forms are generated noun genitives and "U" forms are generated adjective forms
-// the dictionary doesn't vouch for (e.g. "førsteste").
+// Danish: COR (Det Centrale Ordregister), a TSV of every inflected form of the
+// words in Retskrivningsordbogen: id, lemma, gloss, grammatical label, form,
+// normering. Filtered by Dansk Scrabbleforening's "Læsevejledning til
+// Retskrivningsordbogen" (2 March 2026), which says which of those forms count:
+// - no proper nouns, abbreviations, or forms with non-letters (apostrophes,
+//   hyphens, so also compound-only forms like "hus-")
+// - nouns take genitive -s (COR's "K" forms); pronouns only a fixed list
+// - past participles can't take definite or plural forms (no "forbudte")
+// - passive past tense ("spistes") only where the dictionary lists it, which COR
+//   doesn't say, so it's left out
+// - modal verbs have no imperative, passive or present participle
+// - adjectives can be compared (COR's "U" forms, e.g. "dødere", "dødeste"). COR
+//   generates these for every adjective, so a few odd ones like "førsteste" slip in.
 const COR_VERSION = '1.5.1.0';
-const COR_SKIPPED_LABELS = /^(prop|fork|romertal|præfiks|suffiks)\b/;
+const COR_SKIPPED_LABELS = /^(prop|fork|romertal|præfiks|suffiks)\b|^vb\.perf\.part\.(pl|sg\.best)$|^vb\.præt\.pass$/;
+const DANISH_MODALS = new Set(['burde', 'kunne', 'måtte', 'skulle', 'ville', 'turde', 'gide', 'monne']);
+const DANISH_MODAL_SKIPPED_LABELS = new Set(['vb.imp', 'vb.inf.pass', 'vb.præs.pass', 'vb.præs.part']);
+const DANISH_PRONOUN_GENITIVES = new Set([
+  'ens', 'dens', 'dets', 'hans', 'deres', 'eders', 'jeres', 'vores', 'begges', 'dennes', 'dettes', 'disses',
+  'hendes', 'ingens', 'intets', 'nogens', 'nogets', 'nogles', 'altings', 'enhvers', 'ethverts', 'hinandens',
+  'hverandres', 'ingentings', 'allesammens',
+]);
 
 async function danish() {
-  const words = new Set();
+  const words = new Set(DANISH_PRONOUN_GENITIVES);
   for await (const line of lines(`https://ordregister.dk/files/cor${COR_VERSION}.tsv`)) {
-    const [, , , label, form, norm] = line.split('\t');
-    if (norm !== 'N' || COR_SKIPPED_LABELS.test(label)) continue;
+    const [, lemma, , label, form] = line.split('\t');
+    if (!form || COR_SKIPPED_LABELS.test(label) || label === 'pron.gen') continue;
+    if (DANISH_MODALS.has(lemma) && DANISH_MODAL_SKIPPED_LABELS.has(label)) continue;
     const word = form.normalize('NFC');
     if (LOWERCASE_WORD.test(word)) words.add(word);
   }
   write('da', 'cor', words);
 }
 
-// Swedish: the headwords of SAOL 14 (Svenska Akademiens ordlista), expanded with
-// their inflections from SALDO's morphology. SAOL itself only abbreviates
-// inflections ("+n +r"), so SALDO spells them out. A SALDO entry is used only when
-// its lemma is a SAOL headword of a matching part of speech. Compound-only forms
-// (msd c/ci/cm/sms, e.g. "upphäv-") and genitives are left out, since neither is a
-// word that SAOL lists.
-const SAOL_TO_SALDO_POS = { NOUN: ['nn'], VERB: ['vb'], ADJ: ['av'], PRON: ['pn'] };
-const SALDO_COMPOUND_MSD = new Set(['c', 'ci', 'cm', 'sms']);
-const SALDO_NAME_POS = new Set(['pm', 'pma', 'pmm']);
-
-function posMatches(saolPos, saldoPos) {
-  for (const pos of saolPos) {
-    const wanted = SAOL_TO_SALDO_POS[pos];
-    if (wanted ? wanted.includes(saldoPos) : !SALDO_NAME_POS.has(saldoPos)) return true;
-  }
-  return false;
-}
-
+// Swedish: the headwords of SAOL 14 (Svenska Akademiens ordlista). Svenska
+// Scrabbleförbundet allows only SAOL's bold headwords, not their inflections
+// (https://scrabbleforbundet.se/regler/). A multi-word entry counts only when it's
+// a verb, and then only its first word ("arta sig" makes "arta" valid).
+// The federation now plays SAOL 15 (2026); Språkbanken's open data is SAOL 14.
 async function swedish() {
-  const headwords = new Map(); // word -> Set of SAOL upos
+  const words = new Set();
   for await (const line of lines('https://spraakbanken.gu.se/resurser/data/karp/saol14-faksimil.jsonl')) {
     if (!line.trim()) continue;
     const entry = JSON.parse(line);
-    const word = entry.normaliserat_ord.normalize('NFC');
-    if (!LOWERCASE_WORD.test(word)) continue;
-    if (!headwords.has(word)) headwords.set(word, new Set());
-    headwords.get(word).add(entry.upos);
-  }
-
-  const words = new Set(headwords.keys());
-  const FEAT = /<feat att="(\w+)" val="([^"]*)"\/>/;
-  let lemma = null;
-  let pos = null;
-  let form = null;
-  let forms = [];
-  for await (const line of lines('https://svn.spraakbanken.gu.se/sb-arkiv/pub/lmf/saldom/saldom.xml')) {
-    if (line.startsWith('<LexicalEntry>')) {
-      lemma = pos = form = null;
-      forms = [];
-    } else if (line.startsWith('</LexicalEntry>')) {
-      if (headwords.has(lemma) && posMatches(headwords.get(lemma), pos)) {
-        for (const word of forms) words.add(word);
-      }
-    } else {
-      const feat = FEAT.exec(line);
-      if (!feat) continue;
-      const [, att, val] = feat;
-      if (att === 'writtenForm') {
-        if (lemma === null) lemma = val.normalize('NFC');
-        else form = val.normalize('NFC');
-      } else if (att === 'partOfSpeech') {
-        pos = val;
-      } else if (att === 'msd' && form !== null) {
-        const msd = val.split(' ');
-        if (!SALDO_COMPOUND_MSD.has(msd[0]) && !msd.includes('gen') && LOWERCASE_WORD.test(form)) {
-          forms.push(form);
-        }
-        form = null;
-      }
-    }
+    const headword = entry.normaliserat_ord.normalize('NFC').trim();
+    const word = entry.upos === 'VERB' ? headword.split(/\s+/)[0] : headword;
+    if (LOWERCASE_WORD.test(word)) words.add(word);
   }
   write('sv', 'saol', words);
 }

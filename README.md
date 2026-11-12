@@ -53,8 +53,8 @@ Each dictionary key matches a `<lang>/<dictionary>.txt` file 1:1. `version` is b
 | tr | kelimelik, tla | no | yes |
 | id | kbbi | no | yes |
 | ca | disc | yes | yes |
-| da | cor | yes | yes |
-| sv | saol | yes | yes |
+| da | cor | [Det Centrale Ordregister (COR)](https://ordregister.dk/) 1.5.1.0, which records every inflected form of the words in Retskrivningsordbogen, 5th edition (2024). Filtered by Dansk Scrabbleforening's [reading guide to Retskrivningsordbogen](https://scrabbleforening.wordpress.com/regler/) (2 March 2026). That means: no proper nouns, abbreviations, or forms with apostrophes or hyphens; nouns take genitive -s, and pronouns only the 25 genitives the guide lists; past participles take no definite or plural forms; modal verbs have no imperative, passive or present participle; adjectives can be compared. Passive past tense (*spistes*) counts only where the dictionary lists it, which COR doesn't record, so it's left out. COR generates comparisons for every adjective, so a few odd ones (*førsteste*) slip in. |
+| sv | saol | Headwords of [SAOL 14](https://spraakbanken.gu.se/en/resources/saol14-faksimil) (Svenska Akademiens ordlista, 14th edition, digitized by Språkbanken). [Svenska Scrabbleförbundet's rules](https://scrabbleforbundet.se/regler/) allow only SAOL's bold headwords, not their inflections, so none are added. Multi-word entries count only for verbs, and then only the first word (*arta sig* → *arta*). Two gaps: the federation plays SAOL 15 (2026) plus its own supplementary list, and this data lacks the bold forms SAOL nests inside other entries (e.g. *ögon* under *öga*). |
 
 ## Sources
 
@@ -85,7 +85,7 @@ Each dictionary key matches a `<lang>/<dictionary>.txt` file 1:1. `version` is b
 
 ### Frequency lists
 
-`<lang>/frequency.txt` comes from [hermitdave/FrequencyWords](https://github.com/hermitdave/FrequencyWords) (`content/2018/<lang>/<lang>_50k.txt`, word counts from OpenSubtitles 2018), filtered to letters-only words that appear in at least one of the language's dictionaries, keeping the order and the top 25,000. The Catalan source drops the middle dot of "l·l" (it has *collegi* for *col·legi*), so Catalan's list has no "l·l" words. Some languages end up with fewer (Portuguese, Turkish, Indonesian and Persian, where many subtitle words aren't in the word list). Regenerate with `npm run build-frequency -- [lang ...]`.
+`<lang>/frequency.txt` comes from [hermitdave/FrequencyWords](https://github.com/hermitdave/FrequencyWords) (`content/2018/<lang>/<lang>_50k.txt`, word counts from OpenSubtitles 2018), filtered to letters-only words that appear in at least one of the language's dictionaries, keeping the order and the top 25,000. The Catalan source drops the middle dot of "l·l" (it has *collegi* for *col·legi*), so Catalan's list has no "l·l" words. Some languages end up with fewer (Portuguese, Turkish, Indonesian and Persian, where many subtitle words aren't in the word list, and Swedish, whose list has no inflected forms). Regenerate with `npm run build-frequency -- [lang ...]`.
 
 ### Tile distributions
 
@@ -100,7 +100,7 @@ The code in this repository (scripts, workflows) is MIT licensed. The bundled wo
 - **pt/wordlist.txt** is MPL-2.0 (via [pythonprobr/palavras](https://github.com/pythonprobr/palavras), itself derived from LibreOffice's MPL-2.0-licensed pt_BR dictionary).
 - **nl/letterlicious.txt** includes words merged in from [OpenTaal/opentaal-wordlist](https://github.com/OpenTaal/opentaal-wordlist), licensed under Revised BSD License (3-clause) and/or CC BY 3.0, © OpenTaal (https://opentaal.org).
 - **da/cor.txt** is derived from [COR](https://ordregister.dk/), which is in the public domain (CC0 1.0).
-- **sv/saol.txt** is derived from Språkbanken's [SAOL 14 faksimil](https://spraakbanken.gu.se/en/resources/saol14-faksimil) and [SALDO morphology](https://spraakbanken.gu.se/en/resources/saldom), both published by Språkbanken Text (University of Gothenburg) under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); SAOL itself is by Svenska Akademien. The list was modified: filtered and expanded as described under "Sources".
+- **sv/saol.txt** is derived from Språkbanken's [SAOL 14 faksimil](https://spraakbanken.gu.se/en/resources/saol14-faksimil), published by Språkbanken Text (University of Gothenburg) under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); SAOL itself is by Svenska Akademien. The list was filtered as described under "Sources".
 - **`*/frequency.txt`** is derived from [FrequencyWords](https://github.com/hermitdave/FrequencyWords), whose content is licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), © Hermit Dave. The derived lists are shared under the same license.
 - All other word lists: no explicit license is stated by their upstream source (see the table above). They are widely redistributed/archived as-is (e.g. by `kamilmielnik/scrabble-dictionaries`), but if you plan to redistribute or use this data commercially, verify the terms of the original source yourself first.
 

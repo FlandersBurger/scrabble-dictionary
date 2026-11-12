@@ -112,7 +112,7 @@
     "hasTiles": true,
     "hasFrequency": true,
     "dictionaries": {
-      "cor": "Every inflected form listed in Retskrivningsordbogen (the official Danish spelling dictionary), taken from Det Centrale Ordregister (COR). Excludes proper nouns, abbreviations, genitives and forms COR generates but the dictionary does not list. Not an official tournament list."
+      "cor": "Danish word forms from Det Centrale Ordregister (COR, the register behind Retskrivningsordbogen), filtered by Dansk Scrabbleforening’s reading guide to Retskrivningsordbogen: inflections and noun genitives included; proper nouns, abbreviations and forms the guide rules out (e.g. definite/plural past participles) excluded."
     }
   },
   "sv": {
@@ -120,7 +120,7 @@
     "hasTiles": true,
     "hasFrequency": true,
     "dictionaries": {
-      "saol": "Headwords of Svenska Akademiens ordlista, 14th edition (SAOL 14), with their inflections from Språkbanken’s SALDO morphology. Excludes genitives, compound-only forms and proper nouns. Not an official tournament list."
+      "saol": "Headwords of Svenska Akademiens ordlista, 14th edition (SAOL 14). Following Svenska Scrabbleförbundet’s rules, only headwords count, not their inflections. The federation now plays SAOL 15, so a few words differ."
     }
   }
 }
